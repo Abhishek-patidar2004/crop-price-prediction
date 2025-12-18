@@ -1,0 +1,4 @@
+com\cropprice\dto\CropPriceApiDto.class
+com\cropprice\service\CropPriceIngestionService.class
+com\cropprice\CropPredictionApplication.class
+com\cropprice\scheduler\CropPriceScheduler.class
