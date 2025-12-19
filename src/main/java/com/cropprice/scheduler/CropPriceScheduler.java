@@ -1,50 +1,63 @@
 package com.cropprice.scheduler;
 
-
-
-/*import com.yourname.cropprediction.dto.CropPriceApiDto;
-import com.yourname.cropprediction.service.CropPriceIngestionService;
-*/
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.cropprice.dto.CropPriceApiDto;
+import com.cropprice.repository.ApiResponse;
+import com.cropprice.service.MandiService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class CropPriceScheduler {
 
-    //private final CropPriceIngestionService ingestionService;
+	private final MandiService mandiService;
+	
+	public CropPriceScheduler(MandiService mandiService) {
+		this.mandiService = mandiService;		
+	}
+	// @Scheduled(cron = "0 0 6 * * ?")
+	@Scheduled(initialDelay = 10000)
+    public void syncCropPricesDaily() throws IOException, InterruptedException  {
 
-   // @Scheduled(cron = "0 0 6 * * ?")
-	@Scheduled(initialDelay = 10000, fixedRate = 600000)
-    public void syncCropPricesDaily() {
-
-        // 1️⃣ Fetch data from Govt API
         List<CropPriceApiDto> apiData = fetchFromGovApi();
-
-        // 2️⃣ Store data into DB
-       // ingestionService.ingestCropPrices(apiData);
+        
+        mandiService.saveMandiData(apiData);
 
         System.out.println("✅ Crop prices synced successfully");
     }
 
     // Mock method (replace with actual API call)
 	
-	  private List<CropPriceApiDto> fetchFromGovApi() {
-		  // Call RestTemplate /WebClient here 
+	  private List<CropPriceApiDto> fetchFromGovApi() throws IOException, InterruptedException  {
+		  String url = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=579b464db66ec23bdd000001cbb10544313342395a9463157cacbbf2&format=json&limit=1000";
+		  HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+		  HttpClient client = HttpClient.newBuilder().build();
+		  HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		  
-		  /*
-		   * 1. API call
-		   * 2. pick 1 by record from json and put them in list of object (CropPriceApiDto)
-		   * 	- convert json object to java object
-		   * 3. return list
-		   */
-		  return List.of(); 
+		  ObjectMapper mapper = new ObjectMapper();
+
+		  ApiResponse resp =
+	                mapper.readValue(response.body(), ApiResponse.class);
+		  
+		  System.out.println(response.statusCode());
+		  System.out.println(response.body());
+		 
+		  return resp.getRecords(); 
 	  }
+	  
+	  
+
 	 
 }
 

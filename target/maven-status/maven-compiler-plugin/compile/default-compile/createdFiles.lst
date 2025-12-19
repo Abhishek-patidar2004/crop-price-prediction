@@ -1,4 +1,7 @@
 com\cropprice\dto\CropPriceApiDto.class
-com\cropprice\service\CropPriceIngestionService.class
 com\cropprice\CropPredictionApplication.class
 com\cropprice\scheduler\CropPriceScheduler.class
+com\cropprice\service\MandiService.class
+com\cropprice\repository\ApiResponse.class
+com\cropprice\dto\MandiPriceEntity.class
+com\cropprice\repository\MandiPriceRepository.class
