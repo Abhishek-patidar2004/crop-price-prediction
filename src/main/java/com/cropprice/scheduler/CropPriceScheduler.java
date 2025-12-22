@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.repository.ApiResponse;
+import com.cropprice.service.DashboardService;
+import com.cropprice.service.LocationMasterService;
 import com.cropprice.service.MandiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,17 +24,26 @@ import java.util.List;
 public class CropPriceScheduler {
 
 	private final MandiService mandiService;
+	private final LocationMasterService locationMasterService;
+	private final DashboardService dashboardService;
 	
-	public CropPriceScheduler(MandiService mandiService) {
-		this.mandiService = mandiService;		
+	public CropPriceScheduler(MandiService mandiService , LocationMasterService locationMasterService , DashboardService dashboardService) {
+		this.mandiService = mandiService;	
+		this.locationMasterService = locationMasterService;
+		this.dashboardService = dashboardService;
 	}
 	// @Scheduled(cron = "0 0 6 * * ?")
-	@Scheduled(initialDelay = 10000)
+	@Scheduled(initialDelay = 3000)
     public void syncCropPricesDaily() throws IOException, InterruptedException  {
 
         List<CropPriceApiDto> apiData = fetchFromGovApi();
         
+        
         mandiService.saveMandiData(apiData);
+        locationMasterService.saveLocationData(apiData);
+        
+        
+        
 
         System.out.println("✅ Crop prices synced successfully");
     }
