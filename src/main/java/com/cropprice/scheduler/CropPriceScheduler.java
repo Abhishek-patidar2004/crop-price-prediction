@@ -65,10 +65,6 @@ public class CropPriceScheduler {
 		  System.out.println(response.body());
 		 
 		  return resp.getRecords(); 
-	  }
-	  
-	  
-
-	 
+	  } 
 }
 

@@ -41,14 +41,14 @@ public class LocationMasterService {
 
     }
     
-    private LocationMaster mapToEntity(CropPriceApiDto record) {
-
-    	LocationMaster entity = new LocationMaster();
-
-	    entity.setState(record.getState());
-	    entity.setDistrict(record.getDistrict());
-	    entity.setMarket(record.getMarket());
-
-	    return entity;
-	}
+	/*
+	 * private LocationMaster mapToEntity(CropPriceApiDto record) {
+	 * 
+	 * LocationMaster entity = new LocationMaster();
+	 * 
+	 * entity.setState(record.getState()); entity.setDistrict(record.getDistrict());
+	 * entity.setMarket(record.getMarket());
+	 * 
+	 * return entity; }
+	 */
 }

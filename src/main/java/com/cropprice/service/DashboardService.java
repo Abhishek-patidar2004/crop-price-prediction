@@ -23,12 +23,13 @@ public class DashboardService {
             String state,
             String district,
             String market,
-            String commodity
+            String commodity,
+            String arrivalDate
     ) {
 
         List<MandiPriceEntity> prices =
             repository.findPricesForDashboard(
-                state, district, market, commodity
+                state, district, market, commodity, arrivalDate
             );
 
         if (prices.isEmpty()) {
@@ -37,18 +38,32 @@ public class DashboardService {
 
         MandiPriceEntity latest = prices.get(0);
 
-//        return new DashboardResponse(
-//            latest.getState(),
-//            latest.getDistrict(),
-//            latest.getMarket(),
-//            latest.getCommodity(),
-//            latest.getminPrice(),
-//            latest.getmaxPrice(),
-//            latest.getModalPrice(),
-//            latest.getarrivalDate()
-//        );
         return latest;
     }
+    
+    
+    public List<MandiPriceEntity> getMaxPrice(
+            String commodity,
+            String arrivalDate,
+            String type
+    ) {
+    	List<MandiPriceEntity> prices = null;
+    	if("max".equalsIgnoreCase(type)) {
+    		 prices =
+                    repository.findMaxPrice(
+                        commodity, arrivalDate
+                    );
+    	}
+    	
+    	if("min".equalsIgnoreCase(type)) {
+    		prices = repository.findMinPrice(
+    				commodity,arrivalDate
+    				);
+    	}
+    	   	
+    	return prices;
+    }
+     
 }
 
 

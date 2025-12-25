@@ -1,9 +1,11 @@
 package com.cropprice.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cropprice.dto.CropPriceApiDto;
+import com.cropprice.dto.LocationMaster;
 import com.cropprice.dto.MandiPriceEntity;
 import com.cropprice.repository.MandiPriceRepository;
 
@@ -40,6 +42,7 @@ public class MandiService {
                 .toList();
 
         repository.saveAll(entities);
+
     }
     
     private MandiPriceEntity mapToEntity(CropPriceApiDto record) {
