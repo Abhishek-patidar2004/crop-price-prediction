@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.repository.ApiResponse;
-import com.cropprice.service.DashboardService;
-import com.cropprice.service.LocationMasterService;
-import com.cropprice.service.MandiService;
+import com.cropprice.service.CommodityService;
+import com.cropprice.service.LocationService;
+import com.cropprice.service.MandiPriceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -23,28 +23,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CropPriceScheduler {
 
-	private final MandiService mandiService;
-	private final LocationMasterService locationMasterService;
-	private final DashboardService dashboardService;
+//	private final MandiService mandiService;
+//	private final LocationMasterService locationMasterService;
+	private final LocationService locationService;
+	private final CommodityService commodityService;
+	private final MandiPriceService mandiPriceService;
 	
-	public CropPriceScheduler(MandiService mandiService , LocationMasterService locationMasterService , DashboardService dashboardService) {
-		this.mandiService = mandiService;	
-		this.locationMasterService = locationMasterService;
-		this.dashboardService = dashboardService;
+	public CropPriceScheduler(LocationService locationService, CommodityService commodityService, MandiPriceService mandiPriceService) {
+		this.locationService = locationService;
+		this.commodityService = commodityService;
+		this.mandiPriceService = mandiPriceService;
 	}
 	// @Scheduled(cron = "0 0 6 * * ?")
 	@Scheduled(initialDelay = 3000)
     public void syncCropPricesDaily() throws IOException, InterruptedException  {
 
         List<CropPriceApiDto> apiData = fetchFromGovApi();
+     
+        //locationService.saveLocationEntity(apiData);
+        //commodityService.saveCommodityEntity(apiData);
+        mandiPriceService.saveMandiPriceEntity(apiData);
         
-        
-        mandiService.saveMandiData(apiData);
-        locationMasterService.saveLocationData(apiData);
-        
-        
-        
-
         System.out.println("✅ Crop prices synced successfully");
     }
 

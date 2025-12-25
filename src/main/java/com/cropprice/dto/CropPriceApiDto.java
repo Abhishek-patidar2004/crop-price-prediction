@@ -1,5 +1,6 @@
 package com.cropprice.dto;
 
+
 public class CropPriceApiDto {
 	private String state;
     private String district;
@@ -25,14 +26,15 @@ public class CropPriceApiDto {
     public String getCommodity() { return commodity; }
     public void setCommodity(String commodity) { this.commodity = commodity; }
     
-    public String getvariety() { return variety;}
-    public void setvariety(String variety) {this.variety = variety;}
+    public String getVariety() { return variety;}
+    public void setVariety(String variety) {this.variety = variety;}
     
-    public String getgrade() {return grade;}
-    public void setgrade(String grade) {this.grade = grade;}
+    public String getGrade() {return grade;}
+    public void setGrade(String grade) {this.grade = grade;}
     
     public String getarrival_date() {return arrival_date;}
     public void setarrival_date(String arrival_date) {this.arrival_date = arrival_date;}
+    //public void setarrival_date(String arrival_date) {this.arrival_date = LocalDate.parse(arrival_date);}
     
     public int getmin_price() {return min_price;}
     public void setmin_price(int min_price) {this.min_price = min_price;}
@@ -40,6 +42,6 @@ public class CropPriceApiDto {
     public int getmax_price() {return max_price;}
     public void setmax_price(int max_price) {this.max_price=max_price;}
 
-    public int getModal_price() { return modal_price; }
-    public void setModal_price(int modal_price) { this.modal_price = modal_price; }
+    public int getmodal_price() { return modal_price; }
+    public void setmodal_price(int modal_price) { this.modal_price = modal_price; }
 }

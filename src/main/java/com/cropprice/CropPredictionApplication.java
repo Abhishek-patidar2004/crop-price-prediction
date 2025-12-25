@@ -20,5 +20,5 @@ public class CropPredictionApplication {
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(CropPredictionApplication.class, args);
        
-    }
+    }	
 }

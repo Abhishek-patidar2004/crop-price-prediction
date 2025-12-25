@@ -1,24 +1,21 @@
 package com.cropprice.repository;
+
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cropprice.dto.MandiPriceEntity;
+import com.cropprice.entity.CommodityEntity;
+import com.cropprice.entity.LocationEntity;
+import com.cropprice.entity.MandiPriceEntity;
 
-import jakarta.persistence.Column;
-
-public interface MandiPriceRepository
-        extends JpaRepository<MandiPriceEntity, Long> {
-	boolean existsByStateAndDistrictAndMarketAndCommodityAndVarietyAndGradeAndArrivalDateAndMinPriceAndMaxPriceAndModalPrice(
-			String state, 
-			String district,
-			String market, 
-			String commodity, 
-			String variety, 
-			String grade, 
-			String arrivalDate, 
-			int minPrice,
-			int maxPrice, 
-			int modalPrice
-			);
+public interface MandiPriceRepository extends JpaRepository<MandiPriceEntity, Long> { boolean existsByLocationAndCommodityAndArrivalDateAndMaxPriceAndMinPriceAndModalPrice(
+			LocationEntity location,
+			CommodityEntity commodity,
+			LocalDate arrival_date,
+			int min_price,
+			int max_price,
+			int modal_price
+		);
+	
 
 }
-
