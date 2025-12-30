@@ -1,11 +1,13 @@
 package com.cropprice.service;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.entity.CommodityEntity;
@@ -78,6 +80,68 @@ public class MandiPriceService {
     			System.out.println("Inside Catch Block");
 			}
     	}
+ }
+ 
+ 
+ @Transactional(readOnly = true)
+ public List<CropPriceApiDto> getMandiPriceEntity(
+		 String state, String district, String market , String commodity, LocalDate arrivaDate
+		 ) {
+
+     List<MandiPriceEntity> list = mandiPriceRepository.findCropPrice(state, district, market, commodity, arrivaDate);
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+     return list.stream().map(mp -> {
+         CropPriceApiDto dto = new CropPriceApiDto();
+
+         dto.setState(mp.getLocation().getState());
+         dto.setDistrict(mp.getLocation().getDistrict());
+         dto.setMarket(mp.getLocation().getMarket());
+         dto.setCommodity(mp.getCommodity().getName());
+
+         dto.setarrival_date(mp.getArrivalDate().format(formatter));
+         dto.setmin_price(mp.getMinPrice());
+         dto.setmax_price(mp.getMaxPrice());
+         dto.setmodal_price(mp.getModalPrice());
+
+         return dto;
+     }).toList();
+ }
+ 
+ @Transactional(readOnly = true)
+ public List<CropPriceApiDto> getMaxMinPrice(String commodity, LocalDate arrivalDate, String type){
+	 List<MandiPriceEntity> prices = null;
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+ 	if("max".equalsIgnoreCase(type)) {
+ 		 prices =
+ 				mandiPriceRepository.findMaxPrice(
+                     commodity, arrivalDate
+                 );
+ 	}
+ 	
+ 	if("min".equalsIgnoreCase(type)) {
+ 		prices = mandiPriceRepository.findMinPrice(
+ 				commodity,arrivalDate
+ 				);
+ 	}
+ 	
+ 	 return prices.stream().map(mp -> {
+         CropPriceApiDto dto = new CropPriceApiDto();
+
+         dto.setState(mp.getLocation().getState());
+         dto.setDistrict(mp.getLocation().getDistrict());
+         dto.setMarket(mp.getLocation().getMarket());
+         dto.setCommodity(mp.getCommodity().getName());
+
+         dto.setarrival_date(mp.getArrivalDate().format(formatter));
+         dto.setmin_price(mp.getMinPrice());
+         dto.setmax_price(mp.getMaxPrice());
+         dto.setmodal_price(mp.getModalPrice());
+
+         return dto;
+     }).toList();
+   	
  }
 
 }

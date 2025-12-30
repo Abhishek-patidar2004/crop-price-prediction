@@ -44,4 +44,6 @@ public class CropPriceApiDto {
 
     public int getmodal_price() { return modal_price; }
     public void setmodal_price(int modal_price) { this.modal_price = modal_price; }
+		// TODO Auto-generated method stub
+		
 }

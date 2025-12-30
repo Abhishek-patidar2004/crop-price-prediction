@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.repository.ApiResponse;
-import com.cropprice.service.CommodityService;
-import com.cropprice.service.LocationService;
 import com.cropprice.service.MandiPriceService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,13 +23,11 @@ public class CropPriceScheduler {
 
 //	private final MandiService mandiService;
 //	private final LocationMasterService locationMasterService;
-	private final LocationService locationService;
-	private final CommodityService commodityService;
+	
 	private final MandiPriceService mandiPriceService;
 	
-	public CropPriceScheduler(LocationService locationService, CommodityService commodityService, MandiPriceService mandiPriceService) {
-		this.locationService = locationService;
-		this.commodityService = commodityService;
+	public CropPriceScheduler(MandiPriceService mandiPriceService) {
+		
 		this.mandiPriceService = mandiPriceService;
 	}
 	// @Scheduled(cron = "0 0 6 * * ?")
