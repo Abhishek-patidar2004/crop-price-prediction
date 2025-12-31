@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,17 +55,17 @@ public class DropdownController {
         return commodityRepo.findAllCommodityNames();
     }
     
-    @GetMapping("/checkprice")
-    public List<CropPriceApiDto> getCropPrice(
-    		@RequestParam String state,
-            @RequestParam String district,
-            @RequestParam String market,
-            @RequestParam String commodity,
-            @RequestParam String arrivalDate
-    		){
-    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			return mandiPriceService.getMandiPriceEntity(state, district, market, commodity, LocalDate.parse(arrivalDate, formatter));
-    }
+//    @GetMapping("/checkprice")
+//    public List<CropPriceApiDto> getCropPrice(
+//    		@RequestParam String state,
+//            @RequestParam String district,
+//            @RequestParam String market,
+//            @RequestParam String commodity,
+//            @RequestParam String arrivalDate
+//    		){
+//    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//			return mandiPriceService.getMandiPriceEntity(state, district, market, commodity, LocalDate.parse(arrivalDate, formatter));
+ //   }
     
     @GetMapping ("/max-min-price")
     public List<CropPriceApiDto> getMaxMinPrice(
@@ -76,6 +77,27 @@ public class DropdownController {
     		return mandiPriceService.getMaxMinPrice(commodity, LocalDate.parse(arrivalDate, formatter), type);
     		
     		}
+
+    
+    @GetMapping("/checkprice")
+    public List<CropPriceApiDto> checkPrice(
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String district,
+            @RequestParam(required = false) String market,
+            @RequestParam(required = false) String commodity,
+            @RequestParam(required = false) String arrivalDate
+    ) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+
+		LocalDate arrivalLocalDate = null;
+				
+		if(arrivalDate != null) {
+			arrivalLocalDate = LocalDate.parse(arrivalDate, formatter);
+		}
+		
+        return mandiPriceService.getPrices(state.trim(), district.trim(), market.trim(), commodity.trim(), arrivalLocalDate);
+    }
 }
 
 

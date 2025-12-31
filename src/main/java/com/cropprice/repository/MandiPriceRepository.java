@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.cropprice.entity.CommodityEntity;
 import com.cropprice.entity.LocationEntity;
@@ -14,22 +15,26 @@ public interface MandiPriceRepository extends JpaRepository<MandiPriceEntity, Lo
 	boolean existsByLocationAndCommodityAndArrivalDateAndMaxPriceAndMinPriceAndModalPrice(LocationEntity location,
 			CommodityEntity commodity, LocalDate arrival_date, int min_price, int max_price, int modal_price);
 
-	@Query(
-	        value = """
-	            SELECT mp.*
-	            FROM mandi_price mp
-	            JOIN location l ON l.id = mp.location_id
-	            JOIN commodity c ON c.id = mp.commodity_id
-	            WHERE l.state = :state
-	              AND l.district = :district
-	              AND l.market = :market
-	              AND c.name = :commodity
-	              AND mp.arrival_date = :arrivalDate
-	        """,
-	        nativeQuery = true
-	    )
-	List<MandiPriceEntity> findCropPrice(String state, String district, String market, String commodity,
-			LocalDate arrivalDate);
+//	@Query(
+//	        value = """
+//	           SELECT mp FROM MandiPriceEntity mp
+//	        		JOIN mp.location l
+//	        		JOIN mp.commodity c
+//	        		WHERE ( l.state = :state)
+//	        		AND ( l.district = :district)
+//	        		 AND (l.market = :market)
+//	        		 AND ( c.name = :commodity)
+//	        		 AND (mp.arrivalDate = :arrivalDate)
+//	        """,
+//	        nativeQuery = true
+//	    )
+//	List<MandiPriceEntity> findCropPrice(
+//			 	 String state,
+//		         String district,
+//		         String market,
+//		        String commodity,
+//		         LocalDate arrivalDate
+//			);
 	
 	
 	 @Query(
@@ -66,5 +71,24 @@ public interface MandiPriceRepository extends JpaRepository<MandiPriceEntity, Lo
 	        nativeQuery = true
 			 )
 	List<MandiPriceEntity> findMinPrice(String commodity, LocalDate arrivalDate);
+	 
+	 
+	 @Query("""
+		        SELECT mp FROM MandiPriceEntity mp
+		        JOIN FETCH mp.location l
+		        JOIN FETCH mp.commodity c
+		        WHERE (:state IS NULL OR l.state = :state)
+		          AND (:district IS NULL OR l.district = :district)
+		          AND (:market IS NULL OR l.market = :market)
+		          AND (:commodity IS NULL OR c.name = :commodity)
+		          AND (:arrivalDate IS NULL OR mp.arrivalDate = :arrivalDate)
+		    """)
+		    List<MandiPriceEntity> findPrices(
+		        @Param("state") String state,
+		        @Param("district") String district,
+		        @Param("market") String market,
+		        @Param("commodity") String commodity,
+		        @Param("arrivalDate") LocalDate arrivalDate
+		    );
 
 }
