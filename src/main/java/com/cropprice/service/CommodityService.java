@@ -9,10 +9,8 @@ import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.entity.CommodityEntity;
 import com.cropprice.repository.CommodityRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class CommodityService {
 	private final CommodityRepository commodityRepository;
 

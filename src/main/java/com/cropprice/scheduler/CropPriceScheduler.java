@@ -1,7 +1,5 @@
 package com.cropprice.scheduler;
 
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +16,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class CropPriceScheduler {
 
 //	private final MandiService mandiService;
@@ -31,7 +29,7 @@ public class CropPriceScheduler {
 		this.mandiPriceService = mandiPriceService;
 	}
 	// @Scheduled(cron = "0 0 6 * * ?")
-	@Scheduled(initialDelay = 3000)
+	//@Scheduled(initialDelay = 3000)
     public void syncCropPricesDaily() throws IOException, InterruptedException  {
 
         List<CropPriceApiDto> apiData = fetchFromGovApi();
