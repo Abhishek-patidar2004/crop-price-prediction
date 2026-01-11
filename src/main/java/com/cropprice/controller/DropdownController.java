@@ -94,7 +94,12 @@ public class DropdownController {
 		String suggestion = askGPTSimulation();
 		List<CropPriceApiDto> list = mandiPriceService.getPrices(state, district, market, commodity);
 		
-		return new SuggestionRespnseApiDto(suggestion, list);
+		SuggestionRespnseApiDto response = new SuggestionRespnseApiDto();
+		response.setCropPriceApiDto(list);
+		response.setSuggestion(suggestion);
+		
+		
+		return response;
         
     }
          
