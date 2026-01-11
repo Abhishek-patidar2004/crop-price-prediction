@@ -3,6 +3,7 @@ package com.cropprice.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,28 +16,6 @@ public interface MandiPriceRepository extends JpaRepository<MandiPriceEntity, Lo
 	boolean existsByLocationAndCommodityAndArrivalDateAndMaxPriceAndMinPriceAndModalPrice(LocationEntity location,
 			CommodityEntity commodity, LocalDate arrival_date, int min_price, int max_price, int modal_price);
 
-//	@Query(
-//	        value = """
-//	           SELECT mp FROM MandiPriceEntity mp
-//	        		JOIN mp.location l
-//	        		JOIN mp.commodity c
-//	        		WHERE ( l.state = :state)
-//	        		AND ( l.district = :district)
-//	        		 AND (l.market = :market)
-//	        		 AND ( c.name = :commodity)
-//	        		 AND (mp.arrivalDate = :arrivalDate)
-//	        """,
-//	        nativeQuery = true
-//	    )
-//	List<MandiPriceEntity> findCropPrice(
-//			 	 String state,
-//		         String district,
-//		         String market,
-//		        String commodity,
-//		         LocalDate arrivalDate
-//			);
-	
-	
 	 @Query(
 			value = """
 		        select mp.*
@@ -81,14 +60,15 @@ public interface MandiPriceRepository extends JpaRepository<MandiPriceEntity, Lo
 		          AND (:district IS NULL OR l.district = :district)
 		          AND (:market IS NULL OR l.market = :market)
 		          AND (:commodity IS NULL OR c.name = :commodity)
-		          AND (:arrivalDate IS NULL OR mp.arrivalDate = :arrivalDate)
+		          ORDER BY mp.arrivalDate DESC
 		    """)
 		    List<MandiPriceEntity> findPrices(
 		        @Param("state") String state,
 		        @Param("district") String district,
 		        @Param("market") String market,
 		        @Param("commodity") String commodity,
-		        @Param("arrivalDate") LocalDate arrivalDate
+		        Pageable pageable
+		       // @Param("arrivalDate") LocalDate arrivalDate
 		    );
-
+	 
 }

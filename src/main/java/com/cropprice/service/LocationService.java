@@ -9,10 +9,8 @@ import com.cropprice.dto.CropPriceApiDto;
 import com.cropprice.entity.LocationEntity;
 import com.cropprice.repository.LocationRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
+
 public class LocationService {
 
     private final LocationRepository locationRepository;

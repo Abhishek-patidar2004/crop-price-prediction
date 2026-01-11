@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +18,8 @@ import com.cropprice.repository.CommodityRepository;
 import com.cropprice.repository.LocationRepository;
 import com.cropprice.repository.MandiPriceRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
+ // @RequiredArgsConstructor
 public class MandiPriceService {
 	private final MandiPriceRepository mandiPriceRepository;
 	private final LocationRepository locationRepository;
@@ -82,32 +81,6 @@ public class MandiPriceService {
     	}
  }
  
-// 
-// @Transactional(readOnly = true)
-// public List<CropPriceApiDto> getMandiPriceEntity(
-//		 String state, String district, String market , String commodity, LocalDate arrivaDate
-//		 ) {
-//
-//     List<MandiPriceEntity> list = mandiPriceRepository.findCropPrice(state, district, market, commodity, arrivaDate);
-//     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//
-//     return list.stream().map(mp -> {
-//         CropPriceApiDto dto = new CropPriceApiDto();
-//
-//         dto.setState(mp.getLocation().getState());
-//         dto.setDistrict(mp.getLocation().getDistrict());
-//         dto.setMarket(mp.getLocation().getMarket());
-//         dto.setCommodity(mp.getCommodity().getName());
-//
-//         dto.setarrival_date(mp.getArrivalDate().format(formatter));
-//         dto.setmin_price(mp.getMinPrice());
-//         dto.setmax_price(mp.getMaxPrice());
-//         dto.setmodal_price(mp.getModalPrice());
-//
-//         return dto;
-//     }).toList();
-// }
- 
  @Transactional(readOnly = true)
  public List<CropPriceApiDto> getMaxMinPrice(String commodity, LocalDate arrivalDate, String type){
 	 List<MandiPriceEntity> prices = null;
@@ -145,9 +118,9 @@ public class MandiPriceService {
   
  @Transactional(readOnly = true)
  public List<CropPriceApiDto> getPrices(
-		 String state, String district, String market , String commodity, LocalDate arrivaDate
+		 String state, String district, String market , String commodity
 		 ){
-	 List<MandiPriceEntity> price = mandiPriceRepository.findPrices(state, district, market, commodity, arrivaDate);
+	 List<MandiPriceEntity> price = mandiPriceRepository.findPrices(state, district, market, commodity, PageRequest.of(0, 7));
 	 
      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -166,8 +139,6 @@ public class MandiPriceService {
 
          return dto;
      }).toList();
-	 
-	 
+ 
  }
-
 }
